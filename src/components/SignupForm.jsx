@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function SignupForm() {
   const [eyeToggle,setEyeToggle] = useState(false);

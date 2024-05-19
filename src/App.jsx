@@ -14,7 +14,7 @@ import FallbackComponent from './utils/FallbackComponent';
 function App() {
   return (
   <>
-    <div className='min-h-screen w-screen bg-black text-white'>
+    <div className='min-h-screen w-screen bg-black text-white text-center'>
     <ErrorBoundary 
       FallbackComponent={FallbackComponent}
       onReset={(details) => {
