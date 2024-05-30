@@ -12,3 +12,5 @@ export const currentDateState = atom('');
 export const activatePromptState = atom(false);
 
 export const expensesArrayState = atom([]);
+
+export const categoryToggleState = atom(false);

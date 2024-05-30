@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAtom } from 'jotai';
 // Icons
-import { IoChevronForward,IoChevronBack } from "react-icons/io5";
+import { TiArrowBack, TiArrowForward } from "react-icons/ti";
 // Hooks
 import useGetDate from '../hooks/useGetDate';
 // Global States
@@ -52,13 +52,13 @@ function DatePicker() {
     <>
       <div className="relative max-w-sm">
         <div className='flex justify-around items-center'>
-          <IoChevronBack onClick={() =>nextDate('sub')}
+           <TiArrowBack onClick={() =>nextDate('sub')}
            className='w-7 h-7 cursor-pointer'/>
 
           <input datepicker="true" type="date" value={currentDate} onChange={dateChangeHandler} 
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white w-[200px] h-[50px] " placeholder="Select date"/>
 
-          <IoChevronForward onClick={() => nextDate('add')}
+          <TiArrowForward onClick={() => nextDate('add')}
           className='w-7 h-7 cursor-pointer'/>
         </div>
       </div>

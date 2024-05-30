@@ -19,6 +19,7 @@ function useGetDate() {
             renderRef.current = false;
         }
     },[]);
+    return null
 }
 
 export default useGetDate

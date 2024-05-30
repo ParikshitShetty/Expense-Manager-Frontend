@@ -1,6 +1,9 @@
+import { useSetAtom } from 'jotai';
 import React, { useState } from 'react';
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify'
+import { loggedInUserIdState } from '../state/userState';
 
 function LoginForm() {
   const [eyeToggle,setEyeToggle] = useState(false);
@@ -9,6 +12,8 @@ function LoginForm() {
       user_name:'',
       password:''
   });
+
+  const setUserId = useSetAtom(loggedInUserIdState);
 
   const naviagtor = useNavigate();
 
@@ -41,47 +46,57 @@ function LoginForm() {
         };
       
         const response = await fetch(url, options);
+        if (!response.ok) {
+          throw new Error("Authentication failed");
+        }
         const respJson = await response.json();
-        console.log("respJson",respJson);
+        setUserId(respJson.user_id);
+        console.log("response",response);
 
+        toast.success("Signed In", {
+          position: "top-right"
+        });
         naviagtor('/');
       } catch (error) {
         console.error("Error while making api request",error);
+        toast.error(error.message, {
+          position: "top-right"
+        });
       }
   };
 
   return (
     <>
         <div className='w-full min-h-screen flex flex-col justify-center items-center'>
-            <span>Login here</span>
+            <span className='font-semibold text-2xl'>Login here</span>
             <form className="w-1/4 h-full mx-auto" onSubmit={LoginFormSubmit}>
               <div className="mb-5 ">
-                <label htmlFor="email" className="block mb-2 text-sm font-medium">Your email / Username</label>
+                <label htmlFor="email" className="block mb-2 text-md font-medium">Your email / Username</label>
                 {/* <input type="email" id="email" name='email'
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " 
                     placeholder="name@flowbite.com" required 
                     value={loginData.email} onChange={InputHandler}/> */}
 
                 <input type="user_name" id="user_name" name='user_name'
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " 
+                    className="bg-transparent border-2 border-gray-300 text-gray-50 text-sm rounded-lg block w-full p-2.5 " 
                     placeholder="user name" required 
                     value={loginData.email} onChange={InputHandler}/>
               </div>
               <div className="mb-5 relative">
-                <label htmlFor="password" className="block mb-2 text-sm font-medium">Your password</label>
+                <label htmlFor="password" className="block mb-2 text-md font-medium">Your password</label>
                 <input type={eyeToggle ? 'text' : "password"} id="password" name='password'
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" 
+                    className="bg-transparent border-2 border-gray-300 text-gray-50 text-sm rounded-lg block w-full p-2.5" 
                     placeholder='••••••••' required 
                     value={loginData.password} onChange={InputHandler}/>
                 {
                   eyeToggle 
                   ? 
                   <IoMdEyeOff onClick={passwordToggle} 
-                  className='w-6 h-6 text-black cursor-pointer absolute right-1 bottom-2'
+                  className='w-6 h-6 text-white cursor-pointer absolute right-1 bottom-2'
                   /> 
                   :
                    <IoMdEye onClick={passwordToggle} 
-                   className='w-6 h-6 text-black cursor-pointer absolute right-1 bottom-2'
+                   className='w-6 h-6 text-white cursor-pointer absolute right-1 bottom-2'
                    />
                 } 
               </div>
@@ -92,7 +107,11 @@ function LoginForm() {
                 </div>
                 <label for="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
               </div> */}
-              <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+              <button type="submit" className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                  Login
+                </span>
+              </button>
             </form>
           </div>
     </>

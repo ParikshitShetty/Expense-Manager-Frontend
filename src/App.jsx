@@ -9,6 +9,7 @@ import Login from './routes/Login'
 import NotFound from './routes/NotFound'
 // Utils
 import FallbackComponent from './utils/FallbackComponent';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         // Reset the state of your app so the error doesn't happen again
       }}
     >
+      <ToastContainer position='top-right' autoClose={3000}/>
       <Routes>
         <Route path='/' element={<Expenses />}/>
         <Route path='/login' element={<Login />}/>

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { Slide } from '@mui/material';
 // Components
 import ExpenseForm from '../components/ExpenseForm';
 import DatePicker from '../components/DatePicker';
@@ -12,6 +13,7 @@ import { IoMdCheckmark } from "react-icons/io";
 // Global States
 import { 
   activatePromptState,
+  categoryToggleState,
   currentDateState,
   expensesArrayState,
   expensesState } from '../state/ExpensesState';
@@ -26,7 +28,8 @@ function Expenses() {
   const currentDate = useAtomValue(currentDateState);
   const userId = useAtomValue(loggedInUserIdState);
 
-  const setExpensesArray = useSetAtom(expensesArrayState)
+  const setExpensesArray = useSetAtom(expensesArrayState);
+  const setCategoryToggle = useSetAtom(categoryToggleState);
 
   const notify = () =>{
     toast.info("Please fill the details", {
@@ -54,6 +57,9 @@ function Expenses() {
           body: JSON.stringify({...expenseData,"date":currentDate,"userId":userId})
         };
         const response = await fetch(url,options);
+        if (!response.ok) {
+          throw new Error("Error while adding expense");
+        }
         const respJson = await response.json();
         console.log("respJson",respJson);
 
@@ -67,6 +73,7 @@ function Expenses() {
           note : ''
         });
         setActivatePrompt(false);
+        setCategoryToggle(false);
       } catch (error) {
         console.error("Error while making api request",error);
       }  
@@ -92,6 +99,9 @@ function Expenses() {
           body: JSON.stringify({"userId":userId})
         };
         const response = await fetch(url,options);
+        if (!response.ok) {
+          throw new Error("Error while fetching expense");
+        }
         const respJson = await response.json();
         setExpensesArray(respJson.data);
     } catch (error) {
@@ -109,7 +119,6 @@ function Expenses() {
   return (
     <>
       <div className='w-full min-h-screen flex flex-col justify-center items-center'>
-        <ToastContainer position='top-right' autoClose={3000}/>
         {/* Components */}
         <DatePicker />
         <ExpenseRenderer />
@@ -120,8 +129,12 @@ function Expenses() {
           (
             <>
                 <ExpenseForm/>
-                <IoMdCheckmark onClick={addExpense}
-                className='w-7 h-7 cursor-pointer'/>
+                <Slide in={activatePrompt} direction='up'>
+                  <span>
+                    <IoMdCheckmark onClick={addExpense}
+                    className='w-7 h-7 cursor-pointer'/>
+                  </span>
+                </Slide>
             </>
           )
         }

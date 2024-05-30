@@ -1,0 +1,14 @@
+[
+    {
+        "name" : "Grocery",
+        "value" : "grocery"
+    },
+    {
+        "name" : "Electronics",
+        "value" : "electronics"
+    },
+    {
+        "name" : "Other",
+        "value" : "other"
+    }
+]
