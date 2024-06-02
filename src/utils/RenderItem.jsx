@@ -1,27 +1,23 @@
-import { ListItem,ListItemText,IconButton } from '@mui/material'
+import { IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function RenderItem({ item }) {
+export default function RenderItem({ item , removeExpense }) {
     return (
       <>
-        <ListItem
-          secondaryAction={
-            <IconButton
+        <span className='w-full my-1 flex justify-evenly items-center '>
+          <span className='w-1/2 h-full text-start '>{item.exp_name}</span>
+          <span className='w-1/2 h-full text-start '>&#8377; &nbsp;{item.exp_amt}</span>
+          <IconButton
               edge="end"
               aria-label="delete"
               title="Delete"
-              // onClick={() => handleRemoveFruit(item)}
+              onClick={() => removeExpense(item)}
             >
               <DeleteIcon sx={{
                 fill:'white'
               }}/>
             </IconButton>
-          }
-          className='w-full my-1 flex justify-evenly items-center '
-        >
-          <ListItemText primary={item.exp_name} className='w-1/3 text-center '/>
-          &#8377; &nbsp;<ListItemText primary={item.exp_amt} className='w-1/3 '/>
-        </ListItem>
+        </span>
       </>    
     );
   }

@@ -2,6 +2,7 @@ import * as React from 'react'
 import 'react-toastify/dist/ReactToastify.css';
 import { Routes,Route } from 'react-router-dom'
 import { ErrorBoundary } from "react-error-boundary";
+import { ToastContainer } from 'react-toastify';
 // Routes
 import Expenses from './routes/Expenses'
 import Signup from './routes/Signup'
@@ -9,8 +10,6 @@ import Login from './routes/Login'
 import NotFound from './routes/NotFound'
 // Utils
 import FallbackComponent from './utils/FallbackComponent';
-import { ToastContainer } from 'react-toastify';
-
 
 function App() {
   return (

@@ -1,9 +1,8 @@
-import { useSetAtom } from 'jotai';
 import React, { useState } from 'react';
-import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
-import {toast} from 'react-toastify'
-import { loggedInUserIdState } from '../state/userState';
+import {toast} from 'react-toastify';
+// Icons
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 function LoginForm() {
   const [eyeToggle,setEyeToggle] = useState(false);
@@ -12,8 +11,6 @@ function LoginForm() {
       user_name:'',
       password:''
   });
-
-  const setUserId = useSetAtom(loggedInUserIdState);
 
   const naviagtor = useNavigate();
 
@@ -31,12 +28,12 @@ function LoginForm() {
   const LoginFormSubmit = async(event) =>{
       event.preventDefault();
       try {
-        const url = "http://localhost:5000/user/login";
+        const url = import.meta.env.VITE_LOGIN_URL;
         const options = {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, *cors, same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: "same-origin", // include, *same-origin, omit
+            credentials: "include", //include is used to set cookies
             headers: {
               "Content-Type": "application/json",
             },
@@ -50,15 +47,14 @@ function LoginForm() {
           throw new Error("Authentication failed");
         }
         const respJson = await response.json();
-        setUserId(respJson.user_id);
-        console.log("response",response);
+        console.log("response",respJson);
 
         toast.success("Signed In", {
           position: "top-right"
         });
         naviagtor('/');
       } catch (error) {
-        console.error("Error while making api request",error);
+        console.error("Error while making api request:",error);
         toast.error(error.message, {
           position: "top-right"
         });
@@ -70,7 +66,7 @@ function LoginForm() {
         <div className='w-full min-h-screen flex flex-col justify-center items-center'>
             <span className='font-semibold text-2xl'>Login here</span>
             <form className="w-1/4 h-full mx-auto" onSubmit={LoginFormSubmit}>
-              <div className="mb-5 ">
+              <div className="my-5 ">
                 <label htmlFor="email" className="block mb-2 text-md font-medium">Your email / Username</label>
                 {/* <input type="email" id="email" name='email'
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " 

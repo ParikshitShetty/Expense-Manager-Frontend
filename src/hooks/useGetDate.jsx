@@ -1,21 +1,26 @@
 
 
 import React, { useEffect, useRef } from 'react'
-import { useAtom } from 'jotai';
-import { currentDateState } from '../state/ExpensesState';
+import { useSetAtom } from 'jotai';
+// Global state
+import { 
+    currentDateState,
+    currentMonthState, } from '../store/ExpensesState';
 
 function useGetDate() {
-    const [currentDate,setCurrentDate] = useAtom(currentDateState);
+    const setCurrentDate = useSetAtom(currentDateState);
+    const setCurrentMonthDate = useSetAtom(currentMonthState);
     const renderRef = useRef(true);
 
     useEffect(()=>{
-        if (currentDate === "" && renderRef.current) {       
+        if (renderRef.current) {       
             const dateObj = new Date();
             const paddedDay = dateObj.getDate().toString().padStart(2, "0");
             const paddedMonth = (dateObj.getMonth() + 1).toString().padStart(2,"0")
             const date = dateObj.getFullYear() + '-' + paddedMonth + '-' + paddedDay;
-
+            
             setCurrentDate(date);
+            setCurrentMonthDate(date);
             renderRef.current = false;
         }
     },[]);

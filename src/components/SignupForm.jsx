@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
+// Icons
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 function SignupForm() {
   const [eyeToggle,setEyeToggle] = useState(false);
@@ -27,7 +28,7 @@ function SignupForm() {
   const SignUpFormSubmit = async(event) =>{
     event.preventDefault();
     try {
-      const url = "http://localhost:5000/user/signup";
+      const url = import.meta.env.VITE_SIGNUP_URL;
       const options = {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
@@ -38,7 +39,6 @@ function SignupForm() {
         },
         redirect: "follow",
         referrerPolicy: "no-referrer", 
-        // body: JSON.stringify(loginData), // body data type must match "Content-Type" header
         body: JSON.stringify(signUpData)
       };
     
@@ -68,7 +68,7 @@ function SignupForm() {
     <div className='w-full min-h-screen flex justify-center items-center'>
         <form className="w-1/4 h-full mx-auto" onSubmit={SignUpFormSubmit}>
           <p className='w-full text-center font-semibold text-2xl'>Sign Up</p>
-          <div className="mb-5">
+          <div className="my-5">
             <label htmlFor="email" className="block mb-2 text-md font-medium  ">Your email</label>
 
             <input type="email" id="email" name='email' placeholder="name@flowbite.com" 

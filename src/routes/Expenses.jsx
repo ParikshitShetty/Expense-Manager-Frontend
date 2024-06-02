@@ -1,24 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { toast } from 'react-toastify';
-import { Slide } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 // Components
 import ExpenseForm from '../components/ExpenseForm';
 import DatePicker from '../components/DatePicker';
 import ExpenseRenderer from '../components/ExpenseRenderer';
+import LogOut from '../components/LogOut';
+import ViewHandler from '../components/ViewHandler';
+import MonthPicker from '../components/MonthPicker';
+import MonthExpenseRenderer from '../components/MonthExpenseRenderer';
 // Utils
 import ExpenseFormToggle from '../utils/ExpenseFormToggle';
-// Icons
-import { IoMdCheckmark } from "react-icons/io";
 // Global States
 import { 
   activatePromptState,
   categoryToggleState,
   currentDateState,
   expensesArrayState,
-  expensesState } from '../state/ExpensesState';
-import { 
-  loggedInUserIdState } from '../state/userState';
+  expensesState, 
+  viewState} from '../store/ExpensesState';
+// Services
+import { expensesGetter } from '../services/ExpenseGetterService';
 
 function Expenses() {
   const renderRef = useRef(true);
@@ -26,92 +29,76 @@ function Expenses() {
   const [activatePrompt,setActivatePrompt] = useAtom(activatePromptState);
   const [expenseData,setExpenseData] = useAtom(expensesState);
   const currentDate = useAtomValue(currentDateState);
-  const userId = useAtomValue(loggedInUserIdState);
 
   const setExpensesArray = useSetAtom(expensesArrayState);
   const setCategoryToggle = useSetAtom(categoryToggleState);
 
+  // For view switch
+  const view = useAtomValue(viewState);
+
+  const navigator = useNavigate();
+
   const notify = () =>{
-    toast.info("Please fill the details", {
+    toast.info("Please select the expense to be added", {
       position: "top-right"
     });
   };
 
   const addExpense = async() => {
-    const form_validator = expenseData.exp_name !== "" && expenseData.exp_amt !== "" && expenseData.category !== "" && expenseData.note !== "" && currentDate !== "";
+    const form_validator = expenseData.exp_name !== "" && expenseData.exp_amt !== "" && expenseData.category !== "" && currentDate !== "";
 
-    if (form_validator) {
-      try {
-        const url = "http://localhost:5000/expenses/adder";
-        const options = {
-          method: "POST", 
-          mode: "cors", 
-          cache: "no-cache", 
-          credentials: "same-origin", 
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': import.meta.env.VITE_JWT,
-          },
-          redirect: "follow",
-          referrerPolicy: "no-referrer", 
-          body: JSON.stringify({...expenseData,"date":currentDate,"userId":userId})
-        };
-        const response = await fetch(url,options);
-        if (!response.ok) {
-          throw new Error("Error while adding expense");
-        }
-        const respJson = await response.json();
-        console.log("respJson",respJson);
-
-        toast.success("Expense Added", {
-          position: "top-right"
-        });
-        setExpenseData({
-          exp_name :'',
-          exp_amt : 0.0,
-          category : '',
-          note : ''
-        });
-        setActivatePrompt(false);
-        setCategoryToggle(false);
-      } catch (error) {
-        console.error("Error while making api request",error);
-      }  
-    }else{
+    if (!form_validator) {
       notify();
-    }
-  }
-
-  const expensesGetter = async() => {
+      return
+    } 
     try {
-        const url = "http://localhost:5000/expenses/getter";
-        const options = {
-          method: "POST", 
-          mode: "cors", 
-          cache: "no-cache", 
-          credentials: "same-origin", 
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJwdnMiLCJpYXQiOjE3MTU3NzEyNDYsImV4cCI6MTcxNTgxNDQ0Nn0.xrSoqNehaRDrxOGVcT8px-C0eCjPEvSHehexRa1gXmQ',
-          },
-          redirect: "follow",
-          referrerPolicy: "no-referrer", 
-          body: JSON.stringify({"userId":userId})
-        };
-        const response = await fetch(url,options);
-        if (!response.ok) {
-          throw new Error("Error while fetching expense");
-        }
-        const respJson = await response.json();
-        setExpensesArray(respJson.data);
+      const url = import.meta.env.VITE_EXPENSES_ADDER_URL;
+      const options = {
+        method: "POST", 
+        mode: "cors", 
+        cache: "no-cache", 
+        credentials: "include", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer", 
+        body: JSON.stringify({...expenseData,"date":currentDate})
+      };
+      const response = await fetch(url,options);
+      if (!response.ok) {
+        if (response.status === 401) navigator('/login');
+        throw new Error("Error while adding expense");
+      }
+
+      const respJson = await response.json();
+      console.log("respJson",respJson);
+
+      toast.success("Expense Added", {
+        position: "top-right"
+      });
+      setExpenseData({
+        exp_name :'',
+        exp_amt : 0.0,
+        category : '',
+        note : ''
+      });
+      setActivatePrompt(false);
+      setCategoryToggle(false);
+      // Call getter function to update the latest expenses
+      expensesGetter(setExpensesArray,navigator);
     } catch (error) {
-        console.error("Error while making api request",error);
-      }  
+      toast.error("Error while adding expense", {
+        position: "top-right"
+      });
+      console.error("Error while making api request",error);
+    }
   }
 
   useEffect(()=>{
     if(renderRef.current){
-      expensesGetter();
+      // Call getter function to update the latest expenses
+      expensesGetter(setExpensesArray,navigator);
       renderRef.current = false;
     }
   },[])
@@ -120,23 +107,31 @@ function Expenses() {
     <>
       <div className='w-full min-h-screen flex flex-col justify-center items-center'>
         {/* Components */}
-        <DatePicker />
-        <ExpenseRenderer />
-        <ExpenseFormToggle />
-        {
-          activatePrompt 
-          &&
-          (
-            <>
-                <ExpenseForm/>
-                <Slide in={activatePrompt} direction='up'>
-                  <span>
-                    <IoMdCheckmark onClick={addExpense}
-                    className='w-7 h-7 cursor-pointer'/>
-                  </span>
-                </Slide>
-            </>
-          )
+        <LogOut />
+        <ViewHandler />
+        { view === 'day'
+          ? 
+            (
+              <>
+                <DatePicker />
+                <ExpenseRenderer />
+                <ExpenseFormToggle addExpense={addExpense}/>
+                { activatePrompt &&
+                  <ExpenseForm/>
+                }
+              </>
+            )
+          :
+          view === 'month'
+          ?
+            (
+              <>
+                <MonthPicker />
+                <MonthExpenseRenderer />
+              </>
+            )
+          :
+          <></>
         }
       </div>
     </>
