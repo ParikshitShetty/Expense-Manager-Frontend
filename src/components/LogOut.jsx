@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 // Icons
 import { RiUser3Fill } from "react-icons/ri";
 import { IoLogOut } from "react-icons/io5";
@@ -45,17 +46,19 @@ function LogOut() {
     };
   return (
     <>
-        <div className='relative w-1/3 my-8'>
+        <div className='relative w-2/3 sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/3 mt-5 h-24'>
             <RiUser3Fill onClick={() => setToggle(!toggle)}
-            className='absolute right-16 -top-14 w-7 h-7 text-white cursor-pointer'/>
+            className='absolute right-16 w-7 h-7 text-white cursor-pointer'/>
             {
                 toggle &&
                 <>
-                    <button onClick={loginOut}
-                    className='border-2 p-2 rounded-md absolute right-0 -top-3 inline-flex cursor-pointer'>
+                    <motion.button 
+                    onClick={loginOut}
+                    whileTap={{scale: 0.9}}
+                    className='border-2 p-2 rounded-md absolute right-0 top-10 inline-flex cursor-pointer text-white hover:text-black hover:bg-gray-200'>
                         Logout &nbsp;
-                        <IoLogOut className=' w-7 h-7 text-white '/>
-                    </button>
+                        <IoLogOut className='w-7 h-7'/>
+                    </motion.button>
                 </>
             }
         </div>

@@ -8,8 +8,10 @@ import useGetDate from '../hooks/useGetDate';
 // Global States
 import { 
   currentDateState } from '../store/ExpensesState';
-// Import json
+// Import Json
 import calendar from '../../public/calendar.json'
+// Import Common Js Functions
+import { currentDayGetter , dateUpdater} from '../common/DateGetter';
 
 function DatePicker() {
   // Call the custom hook
@@ -24,22 +26,6 @@ function DatePicker() {
     setCurrentDate(e.target.value);
   }
 
-  // To get the current and nextday objects
-  const currentDayGetter = (currentDate) =>{
-    const day = new Date(currentDate);
-    const nextDay = new Date(day);
-    return { day,nextDay };
-  }
-
-  // To update the date state accodingly
-  const dateUpdater = (nextDay) => {
-    const paddedMonth = (nextDay.getMonth() + 1).toString().padStart(2, "0");
-    const paddedDay = nextDay.getDate().toString().padStart(2, "0");
-    const date = nextDay.getFullYear() + '-' + paddedMonth + '-' + paddedDay;
-    
-    setCurrentDate(date);
-  }
-
   // Function to update the next date
   const nextDate = (updateParam) => {
     const {day,nextDay} = currentDayGetter(currentDate);
@@ -50,7 +36,7 @@ function DatePicker() {
       nextDay.setDate(day.getDate() - 1);
     }
 
-    dateUpdater(nextDay);
+    dateUpdater(nextDay,setCurrentDate);
   } 
 
   // Function to open date picker
@@ -74,7 +60,7 @@ function DatePicker() {
 
   return (
     <>
-      <div className="relative w-1/5 h-full ">
+      <div className="relative w-2/3 sm:w-1/3 md:w-1/4 xl:w-1/5 h-full ">
         <div className=' flex justify-around items-center '>
           <motion.span 
             whileTap={{scale: 0.9}}
@@ -86,7 +72,7 @@ function DatePicker() {
           </motion.span> 
 
           <button
-            className="dark:bg-gray-900 dark:text-white w-3/5 h-12 rounded"
+            className="dark:bg-gray-900 dark:text-white w-3/5 h-12 rounded font-semibold"
             onClick={dateInputClickHandler}
             >
               {dateObj &&

@@ -4,17 +4,16 @@ import { TiArrowBack, TiArrowForward } from 'react-icons/ti';
 import { useAtom, useAtomValue } from 'jotai';
 // Global states
 import { 
-  currentDateObjState,    
+  currentDateObjState,  
   currentMonthState, } from '../store/ExpensesState';
 // Import json
 import calendar from '../../public/calendar.json'
 // Hooks
 import useGetDate from '../hooks/useGetDate';
 // Import Common Js Functions
-import { currentDayGetter ,dateUpdater} from '../common/DateGetter';
+import { currentDayGetter , dateUpdater} from '../common/DateGetter';
 
-function MonthPicker() {
-    // Call hook
+function YearPicker() {
     useGetDate();
     const [currentMonthDate,setCurrentMonthDate] = useAtom(currentMonthState);
     const [dateObj,setDateObj] = useAtom(currentDateObjState);
@@ -30,9 +29,9 @@ function MonthPicker() {
     const nextDate = (updateParam) => {
       const {day,nextDay} = currentDayGetter(currentMonthDate);
       if(updateParam === 'add'){
-        nextDay.setMonth(day.getMonth() + 1);
+        nextDay.setFullYear(day.getFullYear() + 1);
       }else{
-        nextDay.setMonth(day.getMonth() - 1);
+        nextDay.setFullYear(day.getFullYear() - 1);
       }
       dateUpdater(nextDay,setCurrentMonthDate);
     } 
@@ -40,7 +39,7 @@ function MonthPicker() {
     // Function to open date picker
     const dateInputClickHandler = (event) =>{
         try {
-          const element = document.getElementById('month-picker');
+          const element = document.getElementById('year-picker');
           element.showPicker();
         } catch (error) {
           alert("error opening date prompt:",error);
@@ -74,12 +73,11 @@ function MonthPicker() {
                 >
                     {dateObj &&
                      <>
-                      {dateObj.month} &nbsp;
                       {dateObj.year}
                      </>
                     }
                 </button>
-                <input id='month-picker' type="date" value={currentMonthDate} placeholder="Select date"
+                <input id='year-picker' type="date" value={currentMonthDate} placeholder="Select date"
                 ref={dateRef}
                 onChange={dateChangeHandler}
                 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 pointer-events-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white w-3/5 h-12 cursor-pointer"/>
@@ -98,4 +96,4 @@ function MonthPicker() {
   )
 }
 
-export default MonthPicker
+export default YearPicker

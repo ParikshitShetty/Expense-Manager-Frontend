@@ -16,7 +16,7 @@ export const expensesArrayState = atom([]);
 export const categoryToggleState = atom(false);
 
 // View Handler states
-export const viewState = atom('month');//day
+export const viewState = atom('day');//day
 export const currentMonthState = atom('');
 
 // Date object in format { "month" : "February","number":2, 'year':2024 }

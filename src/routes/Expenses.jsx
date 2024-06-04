@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 // Components
 import ExpenseForm from '../components/ExpenseForm';
 import DatePicker from '../components/DatePicker';
-import ExpenseRenderer from '../components/ExpenseRenderer';
+import ExpenseRenderer from '../components/renderer/ExpenseRenderer';
 import LogOut from '../components/LogOut';
 import ViewHandler from '../components/ViewHandler';
 import MonthPicker from '../components/MonthPicker';
-import MonthExpenseRenderer from '../components/MonthExpenseRenderer';
+import CommonExpenseRenderer from '../components/renderer/CommonExpenseRenderer';
+import YearPicker from '../components/YearPicker';
 // Utils
 import ExpenseFormToggle from '../utils/ExpenseFormToggle';
 // Global States
@@ -22,14 +23,15 @@ import {
   viewState} from '../store/ExpensesState';
 // Services
 import { expensesGetter } from '../services/ExpenseGetterService';
+import DaywiseRenderer from '../components/renderer/DaywiseRenderer';
 
 function Expenses() {
   const renderRef = useRef(true);
 
-  const [activatePrompt,setActivatePrompt] = useAtom(activatePromptState);
   const [expenseData,setExpenseData] = useAtom(expensesState);
   const currentDate = useAtomValue(currentDateState);
 
+  const setActivatePrompt = useSetAtom(activatePromptState);
   const setExpensesArray = useSetAtom(expensesArrayState);
   const setCategoryToggle = useSetAtom(categoryToggleState);
 
@@ -105,7 +107,7 @@ function Expenses() {
   
   return (
     <>
-      <div className='w-full min-h-screen flex flex-col justify-center items-center'>
+      <div className='w-full min-h-screen overflow-y-hidden flex flex-col justify-start items-center relative bg-inherit'>
         {/* Components */}
         <LogOut />
         <ViewHandler />
@@ -116,9 +118,7 @@ function Expenses() {
                 <DatePicker />
                 <ExpenseRenderer />
                 <ExpenseFormToggle addExpense={addExpense}/>
-                { activatePrompt &&
-                  <ExpenseForm/>
-                }
+                <ExpenseForm/>
               </>
             )
           :
@@ -127,11 +127,20 @@ function Expenses() {
             (
               <>
                 <MonthPicker />
-                <MonthExpenseRenderer />
+                <CommonExpenseRenderer view={view} />
+                <DaywiseRenderer view={view}/>
               </>
             )
           :
-          <></>
+          view === 'year'
+          &&
+            (
+              <>
+                <YearPicker />
+                <CommonExpenseRenderer view={view} />
+                <DaywiseRenderer view={view}/>
+              </>
+            )
         }
       </div>
     </>

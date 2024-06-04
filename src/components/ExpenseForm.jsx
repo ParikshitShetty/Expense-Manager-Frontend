@@ -26,8 +26,8 @@ function ExpenseForm() {
   }
   return (
     <>
-      <Slide in={activatePrompt} direction='up'>
-        <div>
+      <Slide in={activatePrompt} direction='up' mountOnEnter unmountOnExit>
+        <div className='absolute bottom-0 mb-5 bg-inherit'>
           <div>
               <label htmlFor="exp_name" className="block mb-2 text-md font-medium text-gray-900 dark:text-white">Expense Name</label>
               <input type="text" id="small-input" name='exp_name' placeholder='Lunch'

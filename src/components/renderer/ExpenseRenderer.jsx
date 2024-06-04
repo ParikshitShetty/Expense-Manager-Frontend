@@ -7,11 +7,11 @@ import { useNavigate } from 'react-router-dom';
 // Global States
 import { 
     currentDateState, 
-    expensesArrayState } from '../store/ExpensesState';
+    expensesArrayState } from '../../store/ExpensesState';
 // Import components
-import RenderItem from '../utils/RenderItem';
+import RenderItem from '../../utils/RenderItem';
 // API Services
-import { expensesGetter } from '../services/ExpenseGetterService'
+import { expensesGetter } from '../../services/ExpenseGetterService'
 
 function ExpenseRenderer() {
     const [expensesArray,setExpensesArray] = useAtom(expensesArrayState);
@@ -75,7 +75,7 @@ function ExpenseRenderer() {
     <>
     { todaysExpenses.length 
         ?
-        <div className='w-1/4 my-2 text-lg font-semibold'>
+        <div className='w-2/3 sm:w-1/2 md:w-[40%] lg:w-[30%] 2xl:w-1/4 my-2 text-lg font-semibold'>
           <span className='w-full my-1 flex justify-evenly items-center '>
             <span className='w-1/2 text-start '>Expense Name</span>
             <span className='w-1/2 text-start'>Exp Amount</span>
@@ -89,15 +89,22 @@ function ExpenseRenderer() {
         </div>
     }
 
-    { todaysExpenses &&
-      <div className='w-1/4 my-2 text-lg yp'>
+    
+      <div className='my-2 text-lg overflow-y-auto overflow-x-auto
+      w-2/3 max-h-[210px]
+      sm:w-1/2 sm:max-h-[240px]
+      md:w-[40%] md:max-h-[240px]
+      lg:w-[30%] lg:max-h-[240px]
+      2xl:w-1/4 2xl:max-h-[300px]'>
         <TransitionGroup>
-          {todaysExpenses.map((item,index) => (
+          {todaysExpenses?.map((item,index) => (
             <Collapse key={index}>            
-              <RenderItem item={item} removeExpense={removeExpense}/>
+              <RenderItem item={item} removeExpense={removeExpense} renderer={'expense_name'}/>
             </Collapse>
           ))}
         </TransitionGroup>
+      </div>
+      <div className='w-2/3 sm:w-1/2 md:w-[40%] lg:w-[30%] 2xl:w-1/4 text-lg'>
         { totalPrice ?
           (
             <span className='w-full flex justify-center items-center border-t-2 text-lg'>
@@ -109,7 +116,6 @@ function ExpenseRenderer() {
           <></>
         }
       </div>
-    }
     </>
   )
 }
