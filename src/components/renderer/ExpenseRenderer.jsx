@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { Collapse } from '@mui/material'
 import { TransitionGroup } from 'react-transition-group';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 // Global States
 import { 
+    activatePromptState,
     currentDateState, 
-    expensesArrayState } from '../../store/ExpensesState';
+    expenseIdState, 
+    expensesArrayState, 
+    expenseSourceState, 
+    expensesState} from '../../store/ExpensesState';
 // Import components
 import RenderItem from '../../utils/RenderItem';
 // API Services
@@ -15,7 +19,13 @@ import { expensesGetter } from '../../services/ExpenseGetterService'
 
 function ExpenseRenderer() {
     const [expensesArray,setExpensesArray] = useAtom(expensesArrayState);
-    const currentDate = useAtomValue(currentDateState);
+    const [expenseData,setExpenseData] = useAtom(expensesState);
+    const [currentDate,setCurrentDate] = useAtom(currentDateState);
+    const [activatePrompt,setActivatePrompt] = useAtom(activatePromptState);
+
+    const [expenseSource,setExpenseSource] = useAtom(expenseSourceState);
+
+    const setExpenseId = useSetAtom(expenseIdState);
 
     const [todaysExpenses,setTodaysExpenses] = useState([]);
     const [totalPrice,setTotalPrice] = useState(0);
@@ -54,6 +64,19 @@ function ExpenseRenderer() {
           console.error("Error while making api request",error);
         }  
       }
+    }
+
+    const expenseEditor = (expense) =>{
+      setActivatePrompt(true);
+      setExpenseData({
+        exp_name :expense.exp_name,
+        exp_amt : expense.exp_amt,
+        category : expense.exp_category,
+        note : expense.exp_note
+      });
+      setCurrentDate(expense.exp_created);
+      setExpenseId(expense.exp_id);
+      setExpenseSource('update');
     }
 
     useEffect(() =>{
@@ -99,7 +122,7 @@ function ExpenseRenderer() {
         <TransitionGroup>
           {todaysExpenses?.map((item,index) => (
             <Collapse key={index}>            
-              <RenderItem item={item} removeExpense={removeExpense} renderer={'expense_name'}/>
+              <RenderItem item={item} removeExpense={removeExpense} renderer={'expense_name'} expenseEditor={expenseEditor}/>
             </Collapse>
           ))}
         </TransitionGroup>
@@ -108,8 +131,8 @@ function ExpenseRenderer() {
         { totalPrice ?
           (
             <span className='w-full flex justify-center items-center border-t-2 text-lg'>
-              <span className='w-1/2 text-end '>&#8377;&nbsp;</span>
-              <span className='w-1/2 text-start '>{totalPrice}</span>
+              <span className='w-[43%] text-end '>&#8377;&nbsp;</span>
+              <span className='w-[50%] text-start '>{totalPrice}</span>
             </span>
           )
           :

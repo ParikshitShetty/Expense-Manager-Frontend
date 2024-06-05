@@ -11,7 +11,7 @@ function LogOut() {
 
     const navigator = useNavigate();
 
-    const loginOut = async() =>{
+    const logOut = async() =>{
         try {
           const url = import.meta.env.VITE_LOGOUT_URL;
           const options = {
@@ -53,7 +53,7 @@ function LogOut() {
                 toggle &&
                 <>
                     <motion.button 
-                    onClick={loginOut}
+                    onClick={logOut}
                     whileTap={{scale: 0.9}}
                     className='border-2 p-2 rounded-md absolute right-0 top-10 inline-flex cursor-pointer text-white hover:text-black hover:bg-gray-200'>
                         Logout &nbsp;

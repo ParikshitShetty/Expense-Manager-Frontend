@@ -21,3 +21,7 @@ export const currentMonthState = atom('');
 
 // Date object in format { "month" : "February","number":2, 'year':2024 }
 export const currentDateObjState = atom({});
+
+// Source of expense updation
+export const expenseSourceState = atom('');
+export const expenseIdState = atom(null);

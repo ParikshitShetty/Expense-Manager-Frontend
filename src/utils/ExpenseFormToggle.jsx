@@ -3,17 +3,20 @@ import { useAtom } from 'jotai';
 import { Slide } from '@mui/material';
 // Components
 import { 
-  activatePromptState, } from '../store/ExpensesState';
+  activatePromptState,
+  expenseSourceState, } from '../store/ExpensesState';
 // Icons
 import { RxCross2 } from "react-icons/rx";
 import { FiPlusCircle } from 'react-icons/fi';
 import { IoMdCheckmark } from 'react-icons/io';
 
 
-function ExpenseFormToggle({addExpense}) {
+function ExpenseFormToggle({source,addExpense,updateExpense}) {
     const [activatePrompt,setActivatePrompt] = useAtom(activatePromptState);
+    const [expenseSource,setExpenseSource] = useAtom(expenseSourceState);
 
-    const promptToggle = () =>{
+    const promptToggle = (param) =>{
+      setExpenseSource(param);
       setActivatePrompt(!activatePrompt);
     };
     
@@ -28,12 +31,12 @@ function ExpenseFormToggle({addExpense}) {
             <div className='w-1/6 h-20 absolute top-0 inline-flex flex-col justify-between items-end'>
               <span>
                 <RxCross2 
-                onClick={promptToggle} 
+                onClick={() => promptToggle('')} 
                 className='w-8 h-8 cursor-pointer'/>
               </span>
               <span>
                 <IoMdCheckmark 
-                onClick={addExpense}
+                onClick={expenseSource === 'update' ? updateExpense : addExpense }
                 className='w-7 h-7 cursor-pointer'/>
               </span>
             </div>
@@ -43,7 +46,7 @@ function ExpenseFormToggle({addExpense}) {
             <div className='absolute top-0 w-1/6 h-full flex flex-col justify-around items-end'>
               <span className=''>
                 <FiPlusCircle
-                  onClick={promptToggle} 
+                  onClick={() => promptToggle('add')} 
                   className='w-8 h-8 cursor-pointer' />
               </span>
             </div>

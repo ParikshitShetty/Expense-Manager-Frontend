@@ -11,6 +11,7 @@ import ViewHandler from '../components/ViewHandler';
 import MonthPicker from '../components/MonthPicker';
 import CommonExpenseRenderer from '../components/renderer/CommonExpenseRenderer';
 import YearPicker from '../components/YearPicker';
+import DaywiseRenderer from '../components/renderer/DaywiseRenderer';
 // Utils
 import ExpenseFormToggle from '../utils/ExpenseFormToggle';
 // Global States
@@ -18,18 +19,21 @@ import {
   activatePromptState,
   categoryToggleState,
   currentDateState,
+  expenseIdState,
   expensesArrayState,
   expensesState, 
   viewState} from '../store/ExpensesState';
 // Services
 import { expensesGetter } from '../services/ExpenseGetterService';
-import DaywiseRenderer from '../components/renderer/DaywiseRenderer';
+import { editExpense } from '../services/ExpenseEditorService'
 
 function Expenses() {
   const renderRef = useRef(true);
 
   const [expenseData,setExpenseData] = useAtom(expensesState);
   const currentDate = useAtomValue(currentDateState);
+
+  const [expenseId,setExpenseId] = useAtom(expenseIdState);
 
   const setActivatePrompt = useSetAtom(activatePromptState);
   const setExpensesArray = useSetAtom(expensesArrayState);
@@ -97,6 +101,11 @@ function Expenses() {
     }
   }
 
+  const updateExpense = async() =>{
+    await editExpense(expenseData,currentDate,expenseId,setExpenseId,setExpenseData,setActivatePrompt,setCategoryToggle,toast,navigator)
+    expensesGetter(setExpensesArray,navigator);
+  }
+
   useEffect(()=>{
     if(renderRef.current){
       // Call getter function to update the latest expenses
@@ -117,7 +126,7 @@ function Expenses() {
               <>
                 <DatePicker />
                 <ExpenseRenderer />
-                <ExpenseFormToggle addExpense={addExpense}/>
+                <ExpenseFormToggle addExpense={addExpense} updateExpense={updateExpense}/>
                 <ExpenseForm/>
               </>
             )
