@@ -65,9 +65,9 @@ function LoginForm() {
     <>
         <div className='w-full min-h-screen flex flex-col justify-center items-center'>
             <span className='font-semibold text-2xl'>Login here</span>
-            <form className="w-1/4 h-full mx-auto" onSubmit={LoginFormSubmit}>
+            <form className="w-2/3 sm:w-1/3 md:w-1/3 lg:w-1/4 h-full mx-auto" onSubmit={LoginFormSubmit}>
               <div className="my-5 ">
-                <label htmlFor="email" className="block mb-2 text-md font-medium">Your email / Username</label>
+                <label htmlFor="email" className="block mb-2 text-md font-medium">Your Username</label>
                 {/* <input type="email" id="email" name='email'
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " 
                     placeholder="name@flowbite.com" required 

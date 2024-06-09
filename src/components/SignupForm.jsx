@@ -66,7 +66,7 @@ function SignupForm() {
   return (
     <>
     <div className='w-full min-h-screen flex justify-center items-center'>
-        <form className="w-1/4 h-full mx-auto" onSubmit={SignUpFormSubmit}>
+        <form className="w-2/3 sm:w-1/3 md:w-1/3 lg:w-1/4 h-full mx-auto" onSubmit={SignUpFormSubmit}>
           <p className='w-full text-center font-semibold text-2xl'>Sign Up</p>
           <div className="my-5">
             <label htmlFor="email" className="block mb-2 text-md font-medium  ">Your email</label>
