@@ -8,12 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import { 
     activatePromptState,
     currentDateState, 
+    expenseGetterLoaderState, 
     expenseIdState, 
     expensesArrayState, 
     expenseSourceState, 
     expensesState} from '../../store/ExpensesState';
 // Import components
 import RenderItem from '../../utils/RenderItem';
+import ExpensesLoader from '../ui/ExpensesLoader';
 // API Services
 import { expensesGetter } from '../../services/ExpenseGetterService'
 
@@ -29,6 +31,8 @@ function ExpenseRenderer() {
 
     const [todaysExpenses,setTodaysExpenses] = useState([]);
     const [totalPrice,setTotalPrice] = useState(0);
+
+    const [loading,setLoading] = useAtom(expenseGetterLoaderState);
 
     const navigator = useNavigate();
 
@@ -58,9 +62,12 @@ function ExpenseRenderer() {
           toast.success("Expense Removed", {
             position: "top-right"
           });
-          // Call getter function to update the latest expenses
-          expensesGetter(setExpensesArray,navigator);
+          // Call getter function to update the latest expenses(true);
+          setLoading(true);
+          await expensesGetter(setExpensesArray,navigator);
+          setLoading(false);
         } catch (error) {
+          setLoading(false);
           console.error("Error while making api request",error);
         }  
       }
@@ -118,7 +125,8 @@ function ExpenseRenderer() {
       sm:w-1/2 sm:max-h-[240px]
       md:w-[40%] md:max-h-[240px]
       lg:w-[30%] lg:max-h-[240px]
-      2xl:w-1/4 2xl:max-h-[300px]'>
+      2xl:w-1/4 2xl:max-h-[300px]
+      relative bg-inherit'>
         <TransitionGroup>
           {todaysExpenses?.map((item,index) => (
             <Collapse key={index}>            
@@ -126,6 +134,9 @@ function ExpenseRenderer() {
             </Collapse>
           ))}
         </TransitionGroup>
+        {loading && (
+          <ExpensesLoader />
+        )}
       </div>
       <div className='w-2/3 sm:w-1/2 md:w-[40%] lg:w-[30%] 2xl:w-1/4 text-lg'>
         { totalPrice ?

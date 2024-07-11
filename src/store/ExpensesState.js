@@ -25,3 +25,6 @@ export const currentDateObjState = atom({});
 // Source of expense updation
 export const expenseSourceState = atom('');
 export const expenseIdState = atom(null);
+
+// Loaders
+export const expenseGetterLoaderState = atom(null);

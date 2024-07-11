@@ -19,6 +19,7 @@ import {
   activatePromptState,
   categoryToggleState,
   currentDateState,
+  expenseGetterLoaderState,
   expenseIdState,
   expensesArrayState,
   expensesState, 
@@ -38,6 +39,8 @@ function Expenses() {
   const setActivatePrompt = useSetAtom(activatePromptState);
   const setExpensesArray = useSetAtom(expensesArrayState);
   const setCategoryToggle = useSetAtom(categoryToggleState);
+
+  const setLoading = useSetAtom(expenseGetterLoaderState);
 
   // For view switch
   const view = useAtomValue(viewState);
@@ -92,8 +95,11 @@ function Expenses() {
       setActivatePrompt(false);
       setCategoryToggle(false);
       // Call getter function to update the latest expenses
-      expensesGetter(setExpensesArray,navigator);
+      setLoading(true);
+      await expensesGetter(setExpensesArray,navigator);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error("Error while adding expense", {
         position: "top-right"
       });
@@ -102,14 +108,23 @@ function Expenses() {
   }
 
   const updateExpense = async() =>{
-    await editExpense(expenseData,currentDate,expenseId,setExpenseId,setExpenseData,setActivatePrompt,setCategoryToggle,toast,navigator)
-    expensesGetter(setExpensesArray,navigator);
+    try {
+      await editExpense(expenseData,currentDate,expenseId,setExpenseId,setExpenseData,setActivatePrompt,setCategoryToggle,toast,navigator)
+      setLoading(true);
+      await expensesGetter(setExpensesArray,navigator);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error while updating expense: ",error)
+    }
   }
 
   useEffect(()=>{
     if(renderRef.current){
       // Call getter function to update the latest expenses
+      setLoading(true);
       expensesGetter(setExpensesArray,navigator);
+      setLoading(false);
       renderRef.current = false;
     }
   },[])
