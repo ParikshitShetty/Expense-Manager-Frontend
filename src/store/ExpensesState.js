@@ -27,4 +27,5 @@ export const expenseSourceState = atom('');
 export const expenseIdState = atom(null);
 
 // Loaders
-export const expenseGetterLoaderState = atom(null);
+export const expenseGetterLoaderState = atom(false);
+export const loginLoadingState = atom(false);

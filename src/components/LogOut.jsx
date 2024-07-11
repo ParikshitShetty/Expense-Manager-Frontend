@@ -55,7 +55,7 @@ function LogOut() {
                     <motion.button 
                     onClick={logOut}
                     whileTap={{scale: 0.9}}
-                    className='border-2 p-2 rounded-md absolute right-0 top-10 inline-flex cursor-pointer text-white hover:text-black hover:bg-gray-200'>
+                    className='border-2 p-2 rounded-md absolute right-0 top-10 inline-flex cursor-pointer text-white hover:text-black hover:bg-gray-200 transition-all ease-in-out duration-500'>
                         Logout &nbsp;
                         <IoLogOut className='w-7 h-7'/>
                     </motion.button>

@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-toastify';
+import { useAtom } from 'jotai';
 // Icons
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+// Global States
+import { loginLoadingState } from '../store/ExpensesState';
+// Components
+import ExpensesLoader from './ui/ExpensesLoader';
 
 function LoginForm() {
   const [eyeToggle,setEyeToggle] = useState(false);
@@ -11,6 +16,8 @@ function LoginForm() {
       user_name:'',
       password:''
   });
+
+  const [loginLoading,setLoginLoading] = useAtom(loginLoadingState);
 
   const naviagtor = useNavigate();
 
@@ -28,6 +35,7 @@ function LoginForm() {
   const LoginFormSubmit = async(event) =>{
       event.preventDefault();
       try {
+        setLoginLoading(true);
         const url = import.meta.env.VITE_LOGIN_URL;
         const options = {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -58,12 +66,14 @@ function LoginForm() {
         toast.error(error.message, {
           position: "top-right"
         });
+      }finally{
+        setLoginLoading(false);
       }
   };
 
   return (
     <>
-        <div className='w-full min-h-screen flex flex-col justify-center items-center'>
+        <div className='w-full min-h-screen flex flex-col justify-center items-center bg-inherit'>
             <span className='font-semibold text-2xl'>Login here</span>
             <form className="w-2/3 sm:w-1/3 md:w-1/3 lg:w-1/4 h-full mx-auto" onSubmit={LoginFormSubmit}>
               <div className="my-5 ">
@@ -109,6 +119,14 @@ function LoginForm() {
                 </span>
               </button>
             </form>
+            {loginLoading && (
+              <>
+                {/* <ExpensesLoader size={50} color={'inherit'}/> */}
+                <ExpensesLoader size={50} color={'inherit'}> 
+                  <span className=' text-white absolute top-[40%] font-semibold text-xl'>Logging you in</span>
+                </ExpensesLoader>
+              </>
+            )}
           </div>
     </>
   )

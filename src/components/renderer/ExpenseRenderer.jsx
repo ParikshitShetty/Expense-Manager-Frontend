@@ -135,7 +135,7 @@ function ExpenseRenderer() {
           ))}
         </TransitionGroup>
         {loading && (
-          <ExpensesLoader />
+          <ExpensesLoader size={45} color={'secondary'}/>
         )}
       </div>
       <div className='w-2/3 sm:w-1/2 md:w-[40%] lg:w-[30%] 2xl:w-1/4 text-lg'>
