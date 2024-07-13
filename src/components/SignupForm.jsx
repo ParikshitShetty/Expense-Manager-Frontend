@@ -12,7 +12,7 @@ function SignupForm() {
     password:''
   });
 
-  const naviagtor = useNavigate();
+  const navigator = useNavigate();
 
   const InputHandler = (event) =>{
     const {name, value} = event.target;
@@ -53,7 +53,7 @@ function SignupForm() {
         position: "top-right"
       });
       
-      naviagtor('/login');
+      navigator('/login');
     } catch (error) {
       console.error("Error while signing up",error);
       toast.error(error.message, {
@@ -97,11 +97,16 @@ function SignupForm() {
             }           
           </div>
           
-          <button type="submit" className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
-            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-              Submit
-            </span>
-          </button>
+          <div className="flex flex-col items-center justify-center mb-5">
+            <button type="submit" className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+              <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                Submit
+              </span>
+            </button>
+            <label htmlFor="remember" className="ms-2 text-md font-medium text-gray-900 dark:text-gray-300">Have an account? &nbsp;
+              <span onClick={() => navigator('/login')} className='font-medium text-primary-600 hover:underline cursor-pointer dark:text-blue-500'>login</span>
+            </label>
+          </div>
         </form>
       </div>
     </>

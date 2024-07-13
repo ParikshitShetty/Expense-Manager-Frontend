@@ -19,7 +19,7 @@ function LoginForm() {
 
   const [loginLoading,setLoginLoading] = useAtom(loginLoadingState);
 
-  const naviagtor = useNavigate();
+  const navigator = useNavigate();
 
   const InputHandler = (event) =>{
       const {name, value} = event.target;
@@ -60,7 +60,7 @@ function LoginForm() {
         toast.success("Signed In", {
           position: "top-right"
         });
-        naviagtor('/');
+        navigator('/');
       } catch (error) {
         console.error("Error while making api request:",error);
         toast.error(error.message, {
@@ -113,11 +113,16 @@ function LoginForm() {
                 </div>
                 <label for="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
               </div> */}
-              <button type="submit" className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                  Login
-                </span>
-              </button>
+              <div className="flex flex-col items-center justify-center mb-5">
+                <button type="submit" className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                  <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    Login
+                  </span>
+                </button>
+                <label htmlFor="remember" className="ms-2 text-md font-medium text-gray-900 dark:text-gray-300">Don't have an account yet? &nbsp;
+                  <span onClick={() => navigator('/signup')} className='font-medium text-primary-600 hover:underline cursor-pointer dark:text-blue-500'>signup</span>
+                </label>
+              </div>
             </form>
             {loginLoading && (
               <>

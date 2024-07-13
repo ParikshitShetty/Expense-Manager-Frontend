@@ -39,6 +39,7 @@ function ExpenseRenderer() {
     const removeExpense = async(expense) => {
       if (expense) {
         try {
+          setLoading(true);
           const url = import.meta.env.VITE_EXPENSES_REMOVER_URL;
           const options = {
             method: "POST", 
@@ -63,13 +64,12 @@ function ExpenseRenderer() {
             position: "top-right"
           });
           // Call getter function to update the latest expenses(true);
-          setLoading(true);
           await expensesGetter(setExpensesArray,navigator);
-          setLoading(false);
         } catch (error) {
-          setLoading(false);
           console.error("Error while making api request",error);
-        }  
+        } finally {
+          setLoading(false);
+        }
       }
     }
 

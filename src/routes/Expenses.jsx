@@ -42,7 +42,8 @@ function Expenses() {
   const setExpensesArray = useSetAtom(expensesArrayState);
   const setCategoryToggle = useSetAtom(categoryToggleState);
 
-  const setLoading = useSetAtom(expenseGetterLoaderState);
+  // const setLoading = useSetAtom(expenseGetterLoaderState);
+  const [loading,setLoading] = useState(false);
 
   const logoutLoading = useAtomValue(logoutLoadingState);
 
@@ -65,6 +66,7 @@ function Expenses() {
       return
     } 
     try {
+      setLoading(true);
       const url = import.meta.env.VITE_EXPENSES_ADDER_URL;
       const options = {
         method: "POST", 
@@ -99,22 +101,21 @@ function Expenses() {
       setActivatePrompt(false);
       setCategoryToggle(false);
       // Call getter function to update the latest expenses
-      setLoading(true);
       await expensesGetter(setExpensesArray,navigator);
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
       toast.error("Error while adding expense", {
         position: "top-right"
       });
       console.error("Error while making api request",error);
+    }finally{
+      setLoading(false);
     }
   }
 
   const updateExpense = async() =>{
     try {
-      await editExpense(expenseData,currentDate,expenseId,setExpenseId,setExpenseData,setActivatePrompt,setCategoryToggle,toast,navigator)
       setLoading(true);
+      await editExpense(expenseData,currentDate,expenseId,setExpenseId,setExpenseData,setActivatePrompt,setCategoryToggle,toast,navigator)
       await expensesGetter(setExpensesArray,navigator);
       setLoading(false);
     } catch (error) {
@@ -123,12 +124,16 @@ function Expenses() {
     }
   }
 
+  const firstExpenseGetter = async() => {
+    setLoading(true);
+    await expensesGetter(setExpensesArray,navigator);
+    setLoading(false);
+  }
+
   useEffect(()=>{
     if(renderRef.current){
       // Call getter function to update the latest expenses
-      setLoading(true);
-      expensesGetter(setExpensesArray,navigator);
-      setLoading(false);
+      firstExpenseGetter();
       renderRef.current = false;
     }
   },[])
@@ -176,6 +181,12 @@ function Expenses() {
             <span className=' text-white absolute top-[40%] font-semibold text-xl'>Signing you Out</span>
           </ExpensesLoader>
         )}
+        { loading && (
+          <ExpensesLoader size={50} color={'inherit'}> 
+            <span className=' text-white absolute top-[40%] font-semibold text-xl'>Fetching Data</span>
+          </ExpensesLoader>
+        )}
+
       </div>
     </>
   )
