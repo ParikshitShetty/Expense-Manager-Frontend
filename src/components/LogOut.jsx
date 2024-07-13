@@ -2,17 +2,23 @@ import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useSetAtom } from 'jotai';
 // Icons
 import { RiUser3Fill } from "react-icons/ri";
 import { IoLogOut } from "react-icons/io5";
+// Global States
+import { 
+  logoutLoadingState, } from '../store/ExpensesState';
 
 function LogOut() {
     const [toggle,setToggle] = useState(false);
+    const setLogoutLoading = useSetAtom(logoutLoadingState);
 
     const navigator = useNavigate();
 
     const logOut = async() =>{
         try {
+          setLogoutLoading(true);
           const url = import.meta.env.VITE_LOGOUT_URL;
           const options = {
               method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -42,6 +48,8 @@ function LogOut() {
           toast.error(error.message, {
             position: "top-right"
           });
+        }finally{
+          setLogoutLoading(false);
         }
     };
   return (

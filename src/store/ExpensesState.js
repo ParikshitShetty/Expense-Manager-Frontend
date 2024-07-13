@@ -29,3 +29,4 @@ export const expenseIdState = atom(null);
 // Loaders
 export const expenseGetterLoaderState = atom(false);
 export const loginLoadingState = atom(false);
+export const logoutLoadingState = atom(false);

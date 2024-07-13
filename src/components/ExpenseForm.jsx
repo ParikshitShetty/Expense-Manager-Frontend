@@ -66,8 +66,8 @@ function ExpenseForm() {
                   <option defaultValue="" selected
                   className='block w-full p-2 text-gray-900 border-2 border-gray-300 rounded-lg  text-md bg-inherit dark:placeholder-gray-400 dark:text-white cursor-pointer'
                   >Select an Category</option>
-                  {categoryJson.map((category)=>(
-                    <option value={category.value} className='block w-full p-2 text-gray-900 border-2 border-gray-300 rounded-lg text-md bg-gray-950 dark:placeholder-gray-400 dark:text-white cursor-pointer'>{category.name}</option>
+                  {categoryJson.map((category,index)=>(
+                    <option key={index} value={category.value} className='block w-full p-2 text-gray-900 border-2 border-gray-300 rounded-lg text-md bg-gray-950 dark:placeholder-gray-400 dark:text-white cursor-pointer'>{category.name}</option>
                   ))}
                 </select>
               </div>

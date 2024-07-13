@@ -14,6 +14,7 @@ import YearPicker from '../components/YearPicker';
 import DaywiseRenderer from '../components/renderer/DaywiseRenderer';
 // Utils
 import ExpenseFormToggle from '../utils/ExpenseFormToggle';
+import ExpensesLoader from '../components/ui/ExpensesLoader';
 // Global States
 import { 
   activatePromptState,
@@ -23,6 +24,7 @@ import {
   expenseIdState,
   expensesArrayState,
   expensesState, 
+  logoutLoadingState, 
   viewState} from '../store/ExpensesState';
 // Services
 import { expensesGetter } from '../services/ExpenseGetterService';
@@ -41,6 +43,8 @@ function Expenses() {
   const setCategoryToggle = useSetAtom(categoryToggleState);
 
   const setLoading = useSetAtom(expenseGetterLoaderState);
+
+  const logoutLoading = useAtomValue(logoutLoadingState);
 
   // For view switch
   const view = useAtomValue(viewState);
@@ -166,6 +170,12 @@ function Expenses() {
               </>
             )
         }
+        {/* Loader */}
+        { logoutLoading && (
+          <ExpensesLoader size={50} color={'inherit'}> 
+            <span className=' text-white absolute top-[40%] font-semibold text-xl'>Signing you Out</span>
+          </ExpensesLoader>
+        )}
       </div>
     </>
   )

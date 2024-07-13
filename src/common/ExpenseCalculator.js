@@ -3,29 +3,32 @@
 const dayWiseExpenseCalculator = (filteredExpenses) => {
     // For datewise addition
     let newArray = [];
-    let pointer1 = '';
+    let pointer1 = ''; // To store date
     let total_amount = 0;
-    for (let index = 0; index < filteredExpenses.length; index++) {
+    const arrayLength = filteredExpenses.length;
+
+    for (let index = 0; index < arrayLength; index++) {
         const element = filteredExpenses[index];
         const pointer2 = element.exp_created;
-
-        if (pointer1 === '') {
+        
+        if (pointer1 === '') { // For first element
             pointer1 = pointer2;
             total_amount = 0;
             total_amount += element.exp_amt;
-            if (filteredExpenses.length === 1) 
+            if (arrayLength === 1) 
                 newArray.push({ exp_created:pointer1, exp_amt:total_amount});
         }
-        else if(pointer1 !== pointer2){
+        else if(pointer1 !== pointer2){ // When the date changes
             newArray.push({ exp_created:pointer1, exp_amt:total_amount});
             pointer1 = pointer2
             total_amount = 0;
             total_amount += element.exp_amt;
+            if (arrayLength === (index+1)) 
+                newArray.push({ exp_created:pointer1, exp_amt:total_amount});
         }            
-        else{
+        else{ // For the last element
             total_amount += element.exp_amt;
-            console.log(filteredExpenses.length,index+1)
-            if (filteredExpenses.length === index+1) 
+            if (arrayLength === (index + 1)) 
                 newArray.push({ exp_created:pointer1, exp_amt:total_amount});
         }
     }
@@ -37,38 +40,38 @@ const monthWiseExpenseCalculator = (filteredExpenses,calendar) =>{
     let newArray = [];
     let pointer1 = '';
     let total_amount = 0;
+    const arrayLength = filteredExpenses.length;
 
-    for (let index = 0; index < filteredExpenses.length; index++) {
+    for (let index = 0; index < arrayLength; index++) {
       const element = filteredExpenses[index];
       const pointer2 = element.exp_created;
 
-      if (pointer1 === '') {
+      if (pointer1 === '') {    // For first element
           pointer1 = pointer2;
           total_amount = 0;
           total_amount += element.exp_amt;
-          if (filteredExpenses.length === 1){
+          if (arrayLength === 1){
               const currentMonthObj = new Date(pointer1);
               const object = calendar.find(months => months.number === (currentMonthObj.getMonth() + 1));
               newArray.push({ exp_created:object.month, exp_amt:total_amount});
           }
       }
-      else if(pointer1 !== pointer2){
+      else if(pointer1 !== pointer2){   // When the date changes
           const currentMonthObj = new Date(pointer1);
           const object = calendar.find(months => months.number === (currentMonthObj.getMonth() + 1));
           newArray.push({ exp_created:object.month, exp_amt:total_amount});
           pointer1 = pointer2
           total_amount = 0;
           total_amount += element.exp_amt;
-          if (filteredExpenses.length === index+1){
+          if (arrayLength === index+1){
             const currentMonthObj = new Date(pointer1);
             const object = calendar.find(months => months.number === (currentMonthObj.getMonth() + 1));
             newArray.push({ exp_created:object.month, exp_amt:total_amount});
           }
       }            
-      else{
+      else{ // For the last element
           total_amount += element.exp_amt;
-          console.log(filteredExpenses.length,index+1)
-          if (filteredExpenses.length === index+1) {
+          if (arrayLength === index+1) {
             const currentMonthObj = new Date(pointer1);
             const object = calendar.find(months => months.number === (currentMonthObj.getMonth() + 1));
             newArray.push({ exp_created:object.month, exp_amt:total_amount});
