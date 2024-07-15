@@ -42,8 +42,8 @@ function Expenses() {
   const setExpensesArray = useSetAtom(expensesArrayState);
   const setCategoryToggle = useSetAtom(categoryToggleState);
 
-  // const setLoading = useSetAtom(expenseGetterLoaderState);
-  const [loading,setLoading] = useState(false);
+  const setLoading = useSetAtom(expenseGetterLoaderState);
+  const [initLoading,setInitLoading] = useState(false);
 
   const logoutLoading = useAtomValue(logoutLoadingState);
 
@@ -125,9 +125,9 @@ function Expenses() {
   }
 
   const firstExpenseGetter = async() => {
-    setLoading(true);
+    setInitLoading(true);
     await expensesGetter(setExpensesArray,navigator);
-    setLoading(false);
+    setInitLoading(false);
   }
 
   useEffect(()=>{
@@ -175,13 +175,14 @@ function Expenses() {
               </>
             )
         }
-        {/* Loader */}
+        {/* Loader for logout */}
         { logoutLoading && (
           <ExpensesLoader size={50} color={'inherit'}> 
             <span className=' text-white absolute top-[40%] font-semibold text-xl'>Signing you Out</span>
           </ExpensesLoader>
         )}
-        { loading && (
+        {/* Loader for Fetching Data initially */}
+        { initLoading && (
           <ExpensesLoader size={50} color={'inherit'}> 
             <span className=' text-white absolute top-[40%] font-semibold text-xl'>Fetching Data</span>
           </ExpensesLoader>

@@ -10,6 +10,7 @@ import {
     expensesArrayState, } from '../../store/ExpensesState';
 // Components
 import RenderItem from '../../utils/RenderItem';
+import PieChartComponent from '../charts/PieChartComponent';
 // Common functions
 import { 
   monthWiseExpenseCalculator,
@@ -65,6 +66,7 @@ function DaywiseRenderer({view}) {
           ))}
         </TransitionGroup>
       </div>
+      <PieChartComponent monthsExpenses={monthsExpenses}/>
     </>
   )
 }
