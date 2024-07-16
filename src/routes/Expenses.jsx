@@ -3,14 +3,14 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 // Components
-import ExpenseForm from '../components/ExpenseForm';
-import DatePicker from '../components/DatePicker';
+import ExpenseForm from '../components/forms/ExpenseForm';
+import DatePicker from '../components/datePickers/DatePicker';
 import ExpenseRenderer from '../components/renderer/ExpenseRenderer';
-import LogOut from '../components/LogOut';
-import ViewHandler from '../components/ViewHandler';
-import MonthPicker from '../components/MonthPicker';
+import LogOut from '../components/forms/LogOut';
+import ViewHandler from '../components/datePickers/ViewHandler';
+import MonthPicker from '../components/datePickers/MonthPicker';
 import CommonExpenseRenderer from '../components/renderer/CommonExpenseRenderer';
-import YearPicker from '../components/YearPicker';
+import YearPicker from '../components/datePickers/YearPicker';
 import DaywiseRenderer from '../components/renderer/DaywiseRenderer';
 // Utils
 import ExpenseFormToggle from '../utils/ExpenseFormToggle';
@@ -137,10 +137,10 @@ function Expenses() {
       renderRef.current = false;
     }
   },[])
-  
+
   return (
     <>
-      <div className='w-full min-h-screen overflow-y-hidden flex flex-col justify-start items-center relative bg-inherit'>
+      <div className='w-full min-h-screen overflow-y-auto flex flex-col justify-start items-center relative bg-inherit'>
         {/* Components */}
         <LogOut />
         <ViewHandler />

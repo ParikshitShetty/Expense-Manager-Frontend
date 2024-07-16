@@ -8,7 +8,7 @@ import { RiUser3Fill } from "react-icons/ri";
 import { IoLogOut } from "react-icons/io5";
 // Global States
 import { 
-  logoutLoadingState, } from '../store/ExpensesState';
+  logoutLoadingState, } from '../../store/ExpensesState';
 
 function LogOut() {
     const [toggle,setToggle] = useState(false);
@@ -39,7 +39,7 @@ function LogOut() {
           const respJson = await response.json();
           console.log("response",respJson);
   
-          toast.success("Signed Out", {
+          toast.info("Signed Out", {
             position: "top-right"
           });
           navigator('/login');

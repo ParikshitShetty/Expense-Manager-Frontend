@@ -9,7 +9,11 @@ const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
         <div className="custom-tooltip bg-gray-900 shadow-md rounded-md p-1 shadow-black">
-          <p className="label">{`${view === 'month' ? `Date` : `Month` } : ${payload[0]?.payload?.payload?.exp_created}`}</p>
+          { payload[0]?.payload?.payload?.exp_created !== undefined && (
+            <p className="label">
+              {`${view === 'month' ? `Date` : `Month` } : ${payload[0]?.payload?.payload?.exp_created}`}
+            </p>
+          )}
           <p className="desc">Amount : &#8377;{payload[0].value}</p>
         </div>
       );

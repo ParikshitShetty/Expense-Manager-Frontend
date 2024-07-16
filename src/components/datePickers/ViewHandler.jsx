@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import React from 'react'
 // Globals States
 import { 
-    viewState, } from '../store/ExpensesState';
+    viewState, } from '../../store/ExpensesState';
 
 function ViewHandler() {
     const [view, setView] = useAtom(viewState);

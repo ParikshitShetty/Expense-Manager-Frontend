@@ -5,9 +5,9 @@ import { Slide } from '@mui/material';
 import { 
   activatePromptState, 
   categoryToggleState, 
-  expensesState } from '../store/ExpensesState';
+  expensesState } from '../../store/ExpensesState';
 // Import json
-import categoryJson from '../../public/category.json'
+import categoryJson from '../../../public/category.json'
 
 function ExpenseForm() {
   const [expenseData,setExpenseData] = useAtom(expensesState);

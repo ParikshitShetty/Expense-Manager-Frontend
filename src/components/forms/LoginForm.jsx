@@ -5,9 +5,9 @@ import { useAtom } from 'jotai';
 // Icons
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 // Global States
-import { loginLoadingState } from '../store/ExpensesState';
+import { loginLoadingState } from '../../store/ExpensesState';
 // Components
-import ExpensesLoader from './ui/ExpensesLoader';
+import ExpensesLoader from '../ui/ExpensesLoader';
 
 function LoginForm() {
   const [eyeToggle,setEyeToggle] = useState(false);
